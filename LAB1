@@ -1,0 +1,39 @@
+import numpy as np
+
+class Neuron:
+    def __init__(self, input_size):
+        self.weights = np.random.rand(input_size)  
+        self.bias = np.random.rand(1)              
+    def forward(self, inputs):
+        z = np.dot(inputs, self.weights) + self.bias  
+        return z
+    def activate(self, z, activation_function):
+        if activation_function == 'sigmoid':
+            return 1 / (1 + np.exp(-z))
+        elif activation_function == 'tanh':
+            return np.tanh(z)
+        elif activation_function == 'relu':
+            return np.maximum(0, z)
+        else:
+            raise ValueError("Unsupported activation function!")
+    def predict(self, inputs, activation_function='sigmoid'):
+        z = self.forward(inputs)
+        return self.activate(z, activation_function)
+def evaluate_activation_functions(neuron, inputs):
+    activation_functions = ['sigmoid', 'tanh', 'relu']
+    predictions = {}
+    for func in activation_functions:
+        preds = neuron.predict(inputs, activation_function=func)
+        predictions[func] = preds
+
+    return predictions
+X = np.array([[0, 0],
+              [0, 1],
+              [1, 0],
+              [1, 1]])
+y = np.array([[0], [1], [1], [0]])  
+neuron = Neuron(input_size=2)
+results = evaluate_activation_functions(neuron, X)
+for func, preds in results.items():
+    print(f"Activation Function: {func}")
+    print(f"Predictions: {preds}\n")
