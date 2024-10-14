@@ -1,0 +1,25 @@
+import pandas as pd
+import random
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.metrics import confusion_matrix
+def sigmoid(x):
+  return 1/(1+np.exp(-x))
+df = pd.read_csv('heart.csv')
+data = df.sample(n = 20,replace = False)
+data.head()
+x = data.iloc[:,:-1]
+x1 = np.matrix(x)
+y = data.iloc[:,-1]
+y1 = np.matrix(y)
+w = np.matrix([0.1]*len(x.iloc[0]))
+bias = -60
+h = x1*w.T +bias
+y_pred = []
+for i in h:
+  k = sigmoid(i)
+  if k > 0.5:
+    y_pred.append(1)
+  else:
+    y_pred.append(0)
+confusion_matrix(list(y),y_pred)
